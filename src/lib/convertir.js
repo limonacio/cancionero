@@ -38,8 +38,23 @@ function unir(lineaAcordes, letra) {
   return out
 }
 
+// Al copiar desde Docs, WhatsApp, notas o la web se cuelan caracteres invisibles
+// (espacios raros, espacio de ancho cero, ♯ ♭) que hacen que "Em7" deje de ser un acorde.
+export function limpiar(texto) {
+  return texto
+    .replace(/[\u200B-\u200D\u2060\uFEFF]/g, '')
+    .replace(/[\u00A0\u1680\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
+    .replace(/♯/g, '#')
+    .replace(/♭/g, 'b')
+}
+
+// Cuántas líneas de la canción son de acordes (para avisarle al usuario si no se reconoció ninguna).
+export function contarLineasDeAcordes(texto) {
+  return limpiar(texto).split(/\r?\n/).filter(esLineaDeAcordes).length
+}
+
 export function convertirClasico(texto) {
-  const lineas = texto.replace(/\t/g, '    ').split(/\r?\n/)
+  const lineas = limpiar(texto).replace(/\t/g, '    ').split(/\r?\n/)
   const salida = []
   for (let n = 0; n < lineas.length; n++) {
     const l = lineas[n]

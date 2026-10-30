@@ -49,3 +49,72 @@ export const canciones = [
   // },
 
 ]
+
+
+  {
+    id: "el-abismo",
+    titulo: "El Abismo",
+    artista: "Illya Kuryaki and Valderramas",
+    tono: "Em",
+    cuerpo: `
+​Em7
+​Me estoy
+​B7
+​llevando el río
+​Asus2
+​debo saciar
+​G
+​la sed de mi adivino.
+
+​Em7
+​Estoy
+​B7
+​corriendo mucho
+​Asus2
+​un pez me grita
+​G
+​y yo nunca lo escucho.
+
+​Y desaparecer
+​es lo que me aconsejan
+​huir de tí
+​salirme de tu senda.
+
+​Pero tomé tu piel
+​quedé imantado a eso
+​como los bosques
+​imantan el silencio.
+
+​E             G#m
+​Quien nos guía hacia el abismo
+​C                C7
+​sabe que quiero, sabe que busco el abismo
+​E              G#m               C        C7
+​quien nos guía hacia el abismo
+
+​El mar
+​lo siento lejos
+​debo nadar
+​hasta tus sueños.
+
+​Desde
+​la fantasía
+​vos me dirás
+​lo fugaz que es la vida.
+
+​Y si quieren juzgarte
+​saca afuera tu alma
+​deja que el sol
+​inserte algo de calma.
+
+​Quebrar lo inquebrantable
+​y ver un mundo aparte
+​es lo que hace
+​que al fin yo pueda amarte.
+
+​quien nos guía hacia el abismo
+​sabe que quiero, sabe que busco el abismo
+​quien nos guía hacia el abismo
+
+`,
+  },

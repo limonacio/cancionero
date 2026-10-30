@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import Letra from './Letra.jsx'
 import { parseSong } from './lib/chords.js'
-import { convertirClasico } from './lib/convertir.js'
+import { convertirClasico, contarLineasDeAcordes } from './lib/convertir.js'
 
 const CLAVE = 'cancionero-borrador'
 
@@ -35,6 +35,7 @@ export default function Editor() {
 
   const cuerpo  = useMemo(() => convertirClasico(texto), [texto])
   const bloques = useMemo(() => parseSong(cuerpo), [cuerpo])
+  const nAcordes = useMemo(() => contarLineasDeAcordes(texto), [texto])
 
   const entrada = `  {
     id: ${JSON.stringify(slug(titulo) || 'nueva-cancion')},
@@ -89,6 +90,11 @@ ${esc(cuerpo)}
               aria-label="Canción con acordes arriba de la letra"
             />
             {!texto && <button type="button" className="chico" onClick={() => setTexto(EJEMPLO)}>cargar el ejemplo</button>}
+            {texto.trim() && (
+              nAcordes > 0
+                ? <span className="estado">{nAcordes} {nAcordes === 1 ? 'línea de acordes reconocida' : 'líneas de acordes reconocidas'}</span>
+                : <span className="aviso">No reconocí ningún acorde. Cada línea de acordes debe tener solo acordes (Am, F#m, Em7, Asus2, C/G) separados por espacios, justo arriba de la letra.</span>
+            )}
           </label>
 
           <div className="col">
