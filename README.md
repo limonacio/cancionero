@@ -14,3 +14,12 @@ sitio transponen desde ahí.
 npm install
 npm run dev
 ```
+
+## Cargar una canción rápido (conversor)
+Escribí la canción en el formato clásico de cancionero (acordes arriba, letra abajo, cada
+acorde alineado con su sílaba) en un `.txt` dentro de `tools/`, y corré:
+```
+node tools/convertir.mjs tools/mi-cancion.txt
+```
+Genera `tools/mi-cancion.cuerpo.txt`: ese texto va dentro de `cuerpo: \`...\`` en `src/data/songs.js`.
+Hay un ejemplo en `tools/ejemplo.txt`.
