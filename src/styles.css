@@ -156,8 +156,11 @@ button.chico:hover { border-color: var(--marca-1); color: var(--marca-1); }
 
 .estado { color: var(--muted); font-size: .8rem; }
 
-/* La canción en dos columnas cuando hay lugar: se ve más y se scrollea menos */
-.letra { columns: 2 330px; column-gap: 48px; }
-
-/* "Segunda parte" (y "Tercera parte") arrancan arriba de la columna siguiente */
-.nueva-columna { break-before: column; }
+/* La canción en dos columnas SOLO cuando hay lugar para las dos (se ve más y se scrollea menos).
+   En pantallas angostas queda una sola columna. El corte de columna de "Segunda parte" va
+   dentro de la misma condición: si se aplicara con una sola columna, el navegador crearía
+   una columna extra a la derecha, fuera de la pantalla, y la segunda parte "desaparecería". */
+@media (min-width: 760px) {
+  .letra { columns: 2; column-gap: 48px; }
+  .nueva-columna { break-before: column; }
+}
