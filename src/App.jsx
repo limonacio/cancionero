@@ -1,17 +1,18 @@
 import { useState, useEffect, useMemo } from 'react'
 import { canciones } from './data/songs.js'
 import { parseSong, transposeChord, prefersFlats } from './lib/chords.js'
+import Letra from './Letra.jsx'
+import Editor from './Editor.jsx'
 
-// Rutas con hash (#/c/mi-cancion): no necesitan configuración en el servidor.
-const useRoute = () => {
+// Rutas con hash (#/c/mi-cancion, #/nueva): no necesitan configuración en el servidor.
+const useHash = () => {
   const [hash, setHash] = useState(window.location.hash)
   useEffect(() => {
     const fn = () => setHash(window.location.hash)
     window.addEventListener('hashchange', fn)
     return () => window.removeEventListener('hashchange', fn)
   }, [])
-  const m = hash.match(/^#\/c\/(.+)$/)
-  return m ? decodeURIComponent(m[1]) : null
+  return hash
 }
 
 const normalizar = (s) =>
@@ -105,29 +106,15 @@ function Cancion({ id }) {
           {pasos !== 0 && <button className="reset" onClick={() => setPasos(0)}>volver a mi tono</button>}
         </div>
 
-        <article className="letra">
-          {bloques.map((b, i) => (
-            <section key={i} className="bloque">
-              {b.seccion && <h2 className="seccion">{b.seccion}</h2>}
-              {b.lineas.map((linea, j) => (
-                <p key={j} className="linea">
-                  {linea.map((s, k) => (
-                    <span key={k} className="tramo">
-                      <span className="acorde">{s.acorde ? mostrar(s.acorde) : ' '}</span>
-                      <span className="texto">{s.texto || ' '}</span>
-                    </span>
-                  ))}
-                </p>
-              ))}
-            </section>
-          ))}
-        </article>
+        <Letra bloques={bloques} mostrar={mostrar} />
       </main>
     </>
   )
 }
 
 export default function App() {
-  const id = useRoute()
-  return id ? <Cancion id={id} /> : <Lista />
+  const hash = useHash()
+  if (hash === '#/nueva') return <Editor />
+  const m = hash.match(/^#\/c\/(.+)$/)
+  return m ? <Cancion id={decodeURIComponent(m[1])} /> : <Lista />
 }

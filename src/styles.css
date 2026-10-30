@@ -111,3 +111,45 @@ main { padding-top: 24px; padding-bottom: 64px; }
   :root { --bg: #fff; --bg2: #fff; --bg3: #ccc; --text: #000; --marca-1: #900030; --marca-2: #000; }
   .cabecera, .tono-panel { display: none; }
 }
+
+/* Editor (#/nueva) */
+.cabecera.ancho, main.ancho { max-width: 1100px; }
+code { background: var(--bg3); padding: 1px 6px; border-radius: 4px; font-size: .9em; }
+.campos { display: grid; grid-template-columns: 1fr 1fr 120px; gap: 12px; margin-bottom: 16px; }
+.campos label { display: grid; gap: 4px; font-size: .8rem; color: var(--muted); }
+.campos input {
+  padding: 10px 12px; background: var(--bg2); color: var(--text);
+  border: 1px solid var(--bg3); border-radius: var(--radius-sm); font: inherit; font-size: 1rem;
+}
+.editor { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.col { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.rotulo { font-size: .8rem; text-transform: uppercase; letter-spacing: .1em; color: var(--marca-2); font-weight: 700; }
+.editor textarea, .codigo textarea {
+  width: 100%; min-height: 360px; padding: 12px; resize: vertical;
+  background: var(--bg2); color: var(--text); border: 1px solid var(--bg3);
+  border-radius: var(--radius); font: inherit; font-size: .95rem; line-height: 1.5;
+  white-space: pre; overflow: auto; tab-size: 4;
+}
+.vista {
+  min-height: 360px; padding: 12px; overflow: auto;
+  background: var(--bg2); border: 1px solid var(--bg3); border-radius: var(--radius);
+}
+.acciones { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 16px 0; }
+.acciones .principal {
+  padding: 12px 20px; border: 0; border-radius: var(--radius-sm);
+  background: var(--marca-2); color: #0d0d0d; font-weight: 700;
+}
+.acciones .principal:disabled { opacity: .4; cursor: not-allowed; }
+button.chico {
+  align-self: flex-start; padding: 6px 12px; background: transparent;
+  border: 1px solid var(--bg3); border-radius: var(--radius-sm); color: var(--muted); font-size: .8rem;
+}
+button.chico:hover { border-color: var(--marca-1); color: var(--marca-1); }
+.aviso { color: var(--marca-1); font-size: .85rem; }
+.codigo summary { cursor: pointer; color: var(--muted); font-size: .85rem; margin-bottom: 8px; }
+.codigo textarea { min-height: 200px; }
+@media (max-width: 800px) {
+  .editor { grid-template-columns: 1fr; }
+  .campos { grid-template-columns: 1fr 1fr; }
+  .campos .corto { grid-column: 1 / -1; }
+}
