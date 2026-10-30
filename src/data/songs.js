@@ -48,13 +48,12 @@ export const canciones = [
   // `,
   // },
 
-]
 
 
   {
     id: "el-abismo",
     titulo: "El Abismo",
-    artista: "Illya Kuryaki and Valderramas",
+    artista: "Illya Kuryaki and The Valderramas",
     tono: "Em",
     cuerpo: `
 ​Em7
@@ -75,6 +74,7 @@ export const canciones = [
 ​G
 ​y yo nunca lo escucho.
 
+
 ​Y desaparecer
 ​es lo que me aconsejan
 ​huir de tí
@@ -92,10 +92,23 @@ export const canciones = [
 ​E              G#m               C        C7
 ​quien nos guía hacia el abismo
 
+Em7
 ​El mar
+​B7
 ​lo siento lejos
+Asus2
 ​debo nadar
+G
 ​hasta tus sueños.
+
+Em7
+​El sol
+​B7
+​me está quemando
+​Asus2
+​y me estoy yendo
+​G
+​hacia tu recuerdo. 
 
 ​Desde
 ​la fantasía
@@ -112,9 +125,14 @@ export const canciones = [
 ​es lo que hace
 ​que al fin yo pueda amarte.
 
-​quien nos guía hacia el abismo
+​E             G#m
+​Quien nos guía hacia el abismo
+​C                C7
 ​sabe que quiero, sabe que busco el abismo
+​E              G#m               C        C7   Em7
 ​quien nos guía hacia el abismo
 
 `,
   },
+
+]
