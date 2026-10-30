@@ -158,3 +158,6 @@ button.chico:hover { border-color: var(--marca-1); color: var(--marca-1); }
 
 /* La canción en dos columnas cuando hay lugar: se ve más y se scrollea menos */
 .letra { columns: 2 330px; column-gap: 48px; }
+
+/* "Segunda parte" (y "Tercera parte") arrancan arriba de la columna siguiente */
+.nueva-columna { break-before: column; }

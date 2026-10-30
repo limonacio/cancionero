@@ -56,6 +56,7 @@ export const canciones = [
     artista: "Illya Kuryaki and The Valderramas",
     tono: "Em",
     cuerpo: `
+# Primera parte
 [Em7]Me estoy
 [B7]llevando el río
 [Asus2]debo saciar
@@ -80,15 +81,11 @@ export const canciones = [
 [C]sabe que quiero, [C7]sabe que busco el abismo
 [E]quien nos guía [G#m]hacia el abismo   [C]         [C7]
 
+# Segunda parte
 [Em7]El mar
 [B7]lo siento lejos
 [Asus2]debo nadar
 [G]hasta tus sueños.
-
-[Em7]El sol
-[B7]me está quemando
-[Asus2]y me estoy yendo
-[G]hacia tu recuerdo. 
 
 [Em7]Desde
 [B7]la fantasía
@@ -108,7 +105,6 @@ export const canciones = [
 [E]Quien nos guía[G#m] hacia el abismo
 [C]sabe que quiero, [C7]sabe que busco el abismo
 [E]quien nos guía [G#m]hacia el abismo   [C]         [C7]     [Em7]
-
 `,
   },
 
