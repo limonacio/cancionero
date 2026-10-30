@@ -22,7 +22,7 @@ const esLineaDeAcordes = (l) => {
 }
 
 const seccion = (l) => {
-  const m = l.match(/^#\s+(.+)$/) || l.match(/^\[(.+)\]$/)
+  const m = l.match(/^#\s+(.+)$/) || l.match(/^\[([^\[\]]+)\]$/)
   if (!m || esAcorde(m[1].trim())) return null
   return m[1].trim()
 }
@@ -53,8 +53,19 @@ export function contarLineasDeAcordes(texto) {
   return limpiar(texto).split(/\r?\n/).filter(esLineaDeAcordes).length
 }
 
+// Acordes entre paréntesis dentro de la letra: "(D) EL (G) RINCON" → "[D]EL [G]RINCON".
+// Solo se convierte si lo de adentro es un acorde de verdad; un "(texto normal)" queda como está.
+export function acordesEntreParentesis(linea) {
+  return linea.replace(/\(([^()\s]+)\)[ ]?/g, (m, c) => (esAcorde(c) ? `[${c}]` : m))
+}
+
+// Pasa la letra a minúsculas SIN tocar los acordes (que distinguen mayúsculas: Am no es AM).
+export function aMinusculas(cuerpo) {
+  return cuerpo.split(/(\[[^\]]*\])/).map(p => (p.startsWith('[') && p.endsWith(']') ? p : p.toLocaleLowerCase('es'))).join('')
+}
+
 export function convertirClasico(texto) {
-  const lineas = limpiar(texto).replace(/\t/g, '    ').split(/\r?\n/)
+  const lineas = limpiar(texto).replace(/\t/g, '    ').split(/\r?\n/).map(acordesEntreParentesis)
   const salida = []
   for (let n = 0; n < lineas.length; n++) {
     const l = lineas[n]

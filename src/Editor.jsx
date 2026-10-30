@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import Letra from './Letra.jsx'
 import { parseSong } from './lib/chords.js'
-import { convertirClasico, contarLineasDeAcordes } from './lib/convertir.js'
+import { convertirClasico, aMinusculas } from './lib/convertir.js'
 
 const CLAVE = 'cancionero-borrador'
 
@@ -19,23 +19,31 @@ const EJEMPLO = `# Estrofa
 Am          F
 Esto es una canción de ejemplo
 C                G
-con la letra puesta abajo`
+con la letra puesta abajo
+
+# Estribillo
+(F) También podés escribir los (C) acordes
+entre paréntesis, (G) pegados a la (Am) sílaba`
 
 export default function Editor() {
   const inicial = useMemo(leerBorrador, [])
-  const [titulo, setTitulo]   = useState(inicial.titulo  || '')
-  const [artista, setArtista] = useState(inicial.artista || '')
-  const [tono, setTono]       = useState(inicial.tono    || '')
-  const [texto, setTexto]     = useState(inicial.texto   || '')
-  const [copiado, setCopiado] = useState('')
+  const [titulo, setTitulo]       = useState(inicial.titulo  || '')
+  const [artista, setArtista]     = useState(inicial.artista || '')
+  const [tono, setTono]           = useState(inicial.tono    || '')
+  const [texto, setTexto]         = useState(inicial.texto   || '')
+  const [minusculas, setMinusculas] = useState(!!inicial.minusculas)
+  const [copiado, setCopiado]     = useState('')
 
   useEffect(() => {
-    try { localStorage.setItem(CLAVE, JSON.stringify({ titulo, artista, tono, texto })) } catch { /* sin guardado */ }
-  }, [titulo, artista, tono, texto])
+    try { localStorage.setItem(CLAVE, JSON.stringify({ titulo, artista, tono, texto, minusculas })) } catch { /* sin guardado */ }
+  }, [titulo, artista, tono, texto, minusculas])
 
-  const cuerpo  = useMemo(() => convertirClasico(texto), [texto])
-  const bloques = useMemo(() => parseSong(cuerpo), [cuerpo])
-  const nAcordes = useMemo(() => contarLineasDeAcordes(texto), [texto])
+  const cuerpo = useMemo(() => {
+    const c = convertirClasico(texto)
+    return minusculas ? aMinusculas(c) : c
+  }, [texto, minusculas])
+  const bloques  = useMemo(() => parseSong(cuerpo), [cuerpo])
+  const nAcordes = useMemo(() => (cuerpo.match(/\[[^\]]+\]/g) || []).length, [cuerpo])
 
   const entrada = `  {
     id: ${JSON.stringify(slug(titulo) || 'nueva-cancion')},
@@ -68,8 +76,8 @@ ${esc(cuerpo)}
       </header>
       <main className="ancho">
         <p className="intro">
-          Escribí o pegá la canción con los acordes arriba de cada sílaba. A la derecha ves cómo queda.
-          Este borrador se guarda en tu navegador; la canción se publica recién cuando pegás la entrada en <code>songs.js</code>.
+          Escribí o pegá la canción. Los acordes pueden ir <strong>arriba de la letra</strong> o <strong>entre paréntesis dentro de la letra</strong>, como (Am).
+          A la derecha ves cómo queda. Este borrador se guarda en tu navegador; la canción se publica recién cuando pegás la entrada en <code>songs.js</code>.
         </p>
 
         <div className="campos">
@@ -80,20 +88,20 @@ ${esc(cuerpo)}
 
         <div className="editor">
           <label className="col">
-            <span className="rotulo">Acordes arriba, letra abajo</span>
+            <span className="rotulo">Canción con acordes</span>
             <textarea
               value={texto}
               onChange={e => setTexto(e.target.value)}
               placeholder={EJEMPLO}
               wrap="off"
               spellCheck={false}
-              aria-label="Canción con acordes arriba de la letra"
+              aria-label="Canción con acordes"
             />
             {!texto && <button type="button" className="chico" onClick={() => setTexto(EJEMPLO)}>cargar el ejemplo</button>}
             {texto.trim() && (
               nAcordes > 0
-                ? <span className="estado">{nAcordes} {nAcordes === 1 ? 'línea de acordes reconocida' : 'líneas de acordes reconocidas'}</span>
-                : <span className="aviso">No reconocí ningún acorde. Cada línea de acordes debe tener solo acordes (Am, F#m, Em7, Asus2, C/G) separados por espacios, justo arriba de la letra.</span>
+                ? <span className="estado">{nAcordes} {nAcordes === 1 ? 'acorde reconocido' : 'acordes reconocidos'}</span>
+                : <span className="aviso">No reconocí ningún acorde. Escribilos solos arriba de la letra (Am, F#m, Em7, Asus2, C/G) o entre paréntesis dentro de la letra: (Am).</span>
             )}
           </label>
 
@@ -106,6 +114,11 @@ ${esc(cuerpo)}
             </div>
           </div>
         </div>
+
+        <label className="opcion">
+          <input type="checkbox" checked={minusculas} onChange={e => setMinusculas(e.target.checked)} />
+          pasar la letra a minúsculas (los acordes no se tocan)
+        </label>
 
         <div className="acciones">
           <button type="button" className="principal" onClick={copiar} disabled={!texto.trim()}>

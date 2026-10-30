@@ -164,3 +164,6 @@ button.chico:hover { border-color: var(--marca-1); color: var(--marca-1); }
   .letra { columns: 2; column-gap: 48px; }
   .nueva-columna { break-before: column; }
 }
+
+.opcion { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: .85rem; color: var(--muted); cursor: pointer; }
+.opcion input { width: 18px; height: 18px; accent-color: var(--marca-2); }
