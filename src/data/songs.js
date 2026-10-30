@@ -56,81 +56,58 @@ export const canciones = [
     artista: "Illya Kuryaki and The Valderramas",
     tono: "Em",
     cuerpo: `
-​Em7
-​Me estoy
-​B7
-​llevando el río
-​Asus2
-​debo saciar
-​G
-​la sed de mi adivino.
+[Em7]Me estoy
+[B7]llevando el río
+[Asus2]debo saciar
+[G]la sed de mi adivino.
 
-​Em7
-​Estoy
-​B7
-​corriendo mucho
-​Asus2
-​un pez me grita
-​G
-​y yo nunca lo escucho.
+[Em7]Estoy
+[B7]corriendo mucho
+[Asus2]un pez me grita
+[G]y yo nunca lo escucho.
 
+[Em7]Y desaparecer
+[B7]es lo que me aconsejan
+[Asus2]huir de tí
+[G]salirme de tu senda.
 
-​Y desaparecer
-​es lo que me aconsejan
-​huir de tí
-​salirme de tu senda.
+[Em7]Pero tomé tu piel
+[B7]quedé imantado a eso
+[Asus2]como los bosques
+[G]imantan el silencio.
 
-​Pero tomé tu piel
-​quedé imantado a eso
-​como los bosques
-​imantan el silencio.
+[E]Quien nos guía[G#m] hacia el abismo
+[C]sabe que quiero, [C7]sabe que busco el abismo
+[E]quien nos guía [G#m]hacia el abismo   [C]         [C7]
 
-​E             G#m
-​Quien nos guía hacia el abismo
-​C                C7
-​sabe que quiero, sabe que busco el abismo
-​E              G#m               C        C7
-​quien nos guía hacia el abismo
+[Em7]El mar
+[B7]lo siento lejos
+[Asus2]debo nadar
+[G]hasta tus sueños.
 
-Em7
-​El mar
-​B7
-​lo siento lejos
-Asus2
-​debo nadar
-G
-​hasta tus sueños.
+[Em7]El sol
+[B7]me está quemando
+[Asus2]y me estoy yendo
+[G]hacia tu recuerdo. 
 
-Em7
-​El sol
-​B7
-​me está quemando
-​Asus2
-​y me estoy yendo
-​G
-​hacia tu recuerdo. 
+[Em7]Desde
+[B7]la fantasía
+[Asus2]vos me dirás
+[G]lo fugaz que es la vida.
 
-​Desde
-​la fantasía
-​vos me dirás
-​lo fugaz que es la vida.
+[Em7]Y si quieren juzgarte
+[B7]saca afuera tu alma
+[Asus2]deja que el sol
+[G]inserte algo de calma.
 
-​Y si quieren juzgarte
-​saca afuera tu alma
-​deja que el sol
-​inserte algo de calma.
+[Em7]Quebrar lo inquebrantable
+[B7]y ver un mundo aparte
+[Asus2]es lo que hace
+[G]que al fin yo pueda amarte.
 
-​Quebrar lo inquebrantable
-​y ver un mundo aparte
-​es lo que hace
-​que al fin yo pueda amarte.
-
-​E             G#m
-​Quien nos guía hacia el abismo
-​C                C7
-​sabe que quiero, sabe que busco el abismo
-​E              G#m               C        C7   Em7
-​quien nos guía hacia el abismo
+[E]Quien nos guía[G#m] hacia el abismo
+[C]sabe que quiero, [C7]sabe que busco el abismo
+[E]quien nos guía [G#m]hacia el abismo   [C]         [C7]     [Em7]
 
 `,
   },

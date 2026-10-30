@@ -18,9 +18,9 @@ const useHash = () => {
 const normalizar = (s) =>
   s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
 
-function Cabecera({ volver }) {
+function Cabecera({ volver, ancho }) {
   return (
-    <header className="cabecera">
+    <header className={`cabecera${ancho ? ' ancho' : ''}`}>
       {volver
         ? <a className="volver" href="#/">&#8249; cancionero</a>
         : <span className="marca">cancionero</span>}
@@ -79,8 +79,8 @@ function Cancion({ id }) {
   if (!cancion) {
     return (
       <>
-        <Cabecera volver />
-        <main><p className="vacio">No encontré esa canción. Volvé a la lista y elegí otra.</p></main>
+        <Cabecera volver ancho />
+        <main className="ancho"><p className="vacio">No encontré esa canción. Volvé a la lista y elegí otra.</p></main>
       </>
     )
   }
@@ -91,8 +91,8 @@ function Cancion({ id }) {
 
   return (
     <>
-      <Cabecera volver />
-      <main>
+      <Cabecera volver ancho />
+      <main className="ancho">
         <h1 className="cancion-titulo">{cancion.titulo}</h1>
         <p className="cancion-artista">{cancion.artista}</p>
 
