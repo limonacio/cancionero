@@ -5,6 +5,7 @@ import { convertirClasico, aMinusculas } from './lib/convertir.js'
 import { guardarPropia, borrarPropia, limpiarBorrador } from './lib/propias.js'
 
 const CLAVE = 'cancionero-borrador'
+const ORDINALES = ['Primera', 'Segunda', 'Tercera', 'Cuarta', 'Quinta', 'Sexta', 'Séptima', 'Octava', 'Novena', 'Décima']
 
 // El almacenamiento del navegador puede fallar (ventana privada, bloqueado): siempre con try/catch.
 const leerBorrador = () => {
@@ -35,6 +36,7 @@ export default function Editor() {
   const [minusculas, setMinusculas] = useState(!!inicial.minusculas)
   const [copiado, setCopiado]     = useState('')
   const [editando, setEditando]   = useState(inicial.editando || '')
+  const areaRef = useRef(null)
   const guardada = useRef(false)   // tras guardar, no volver a escribir el borrador
 
   useEffect(() => {
@@ -66,6 +68,23 @@ ${esc(cuerpo)}
       setCopiado('ok')
       setTimeout(() => setCopiado(''), 2500)
     } catch { setCopiado('error') }
+  }
+  // Inserta una línea (título o marca) donde está el cursor, con las líneas en blanco que hagan falta.
+  const insertar = (linea) => {
+    const el = areaRef.current
+    const ini = el ? el.selectionStart : texto.length
+    const fin = el ? el.selectionEnd : texto.length
+    const antes = texto.slice(0, ini)
+    const despues = texto.slice(fin)
+    const pre = antes === '' || antes.endsWith('\n\n') ? '' : antes.endsWith('\n') ? '\n' : '\n\n'
+    const post = despues.startsWith('\n') ? '' : '\n'
+    const hasta = antes + pre + linea + post
+    setTexto(hasta + despues)
+    requestAnimationFrame(() => { if (el) { el.focus(); el.setSelectionRange(hasta.length, hasta.length) } })
+  }
+  const nuevaEstrofa = () => {
+    const n = (texto.match(/^#\s+.*estrofa\s*$/gim) || []).length
+    insertar(`# ${n < ORDINALES.length ? `${ORDINALES[n]} estrofa` : `Estrofa ${n + 1}`}`)
   }
   const guardarAca = () => {
     const id = slug(titulo) || 'nueva-cancion'
@@ -101,7 +120,15 @@ ${esc(cuerpo)}
         <div className="editor">
           <label className="col">
             <span className="rotulo">Canción con acordes</span>
+            <span className="herramientas">
+              <button type="button" className="chico" onClick={nuevaEstrofa}>+ estrofa</button>
+              <button type="button" className="chico" onClick={() => insertar('# Estribillo')}>+ estribillo</button>
+              <button type="button" className="chico" onClick={() => insertar('# Puente')}>+ puente</button>
+              <button type="button" className="chico" onClick={() => insertar('# Intro')}>+ intro</button>
+              <button type="button" className="chico" onClick={() => insertar('---')}>cortar columna</button>
+            </span>
             <textarea
+              ref={areaRef}
               value={texto}
               onChange={e => setTexto(e.target.value)}
               placeholder={EJEMPLO}

@@ -177,3 +177,7 @@ button.chico:hover { border-color: var(--marca-1); color: var(--marca-1); }
 .vista .letra { columns: 1 !important; }
 .vista .nueva-columna { break-before: auto !important; }
 .vista .linea { white-space: nowrap; }
+
+.herramientas { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 6px; }
+
+.grupo { break-inside: avoid; }
