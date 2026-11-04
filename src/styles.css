@@ -181,3 +181,5 @@ button.chico:hover { border-color: var(--marca-1); color: var(--marca-1); }
 .herramientas { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 6px; }
 
 .grupo { break-inside: avoid; }
+
+.publicar { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 22px 0 0; }

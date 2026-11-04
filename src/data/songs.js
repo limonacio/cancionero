@@ -12,7 +12,9 @@
 //    cuerpo   → letra con acordes entre corchetes (ver src/lib/chords.js)
 // ─────────────────────────────────────────────────────────────
 
-export const canciones = [
+import publicadas from './publicadas.json'
+
+const manuales = [
 
   // ── Para agregar una canción: copiá este bloque ───────────
   // {
@@ -87,3 +89,8 @@ export const canciones = [
   },
 
 ]
+
+// Las canciones importadas con tools/importar.mjs (publicadas.json) se suman a las de arriba.
+// Si una repite id, la importada reemplaza a la manual.
+const idsPublicadas = new Set(publicadas.map(c => c.id))
+export const canciones = [...manuales.filter(c => !idsPublicadas.has(c.id)), ...publicadas]

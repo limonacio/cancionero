@@ -12,13 +12,35 @@ const guardar = (lista) => {
 }
 export const guardarPropia = (c) => guardar([...leerPropias().filter(x => x.id !== c.id), { ...c, local: true }])
 export const borrarPropia = (id) => guardar(leerPropias().filter(x => x.id !== id))
+const CAMPOS = ['titulo', 'artista', 'tono', 'cuerpo']
+const igual = (a, b) => CAMPOS.every(k => a[k] === b[k])
+
 // Si una canción guardada tiene el mismo id que una del sitio, la tuya la reemplaza (solo en este navegador).
+// Si es idéntica a la del sitio, ya está publicada: se muestra como la del sitio.
 export const todas = () => {
   const locales = leerPropias()
   const porId = new Map(locales.map(c => [c.id, c]))
-  const idsSitio = new Set(canciones.map(c => c.id))
-  const delSitio = canciones.map(c => (porId.has(c.id) ? { ...porId.get(c.id), local: true, reemplaza: true } : c))
-  return [...delSitio, ...locales.filter(c => !idsSitio.has(c.id))]
+  const delSitio = new Map(canciones.map(c => [c.id, c]))
+  const lista = canciones.map(c => {
+    const l = porId.get(c.id)
+    return l && !igual(l, c) ? { ...l, local: true, reemplaza: true } : c
+  })
+  return [...lista, ...locales.filter(c => !delSitio.has(c.id))]
+}
+
+// Baja un archivo con las canciones que solo están en este navegador, listo para tools/importar.mjs
+export const exportarPropias = () => {
+  const pendientes = todas().filter(c => c.local).map(({ id, titulo, artista, tono, cuerpo }) => ({ id, titulo, artista, tono, cuerpo }))
+  if (!pendientes.length) return 0
+  const blob = new Blob([JSON.stringify(pendientes, null, 2)], { type: 'application/json' })
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = 'mis-canciones.json'
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000)
+  return pendientes.length
 }
 
 const CLAVE_BORRADOR = 'cancionero-borrador'

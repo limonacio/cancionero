@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { todas, borrarPropia, prepararEdicion, entradaParaSongs, limpiarBorrador } from './lib/propias.js'
+import { todas, borrarPropia, prepararEdicion, entradaParaSongs, limpiarBorrador, exportarPropias } from './lib/propias.js'
 import { parseSong, transposeChord, prefersFlats } from './lib/chords.js'
 import Letra from './Letra.jsx'
 import Editor from './Editor.jsx'
@@ -31,10 +31,12 @@ function Cabecera({ volver, ancho }) {
 
 function Lista() {
   const [q, setQ] = useState('')
+  const todasLas = useMemo(() => todas(), [])
+  const hayLocales = todasLas.some(c => c.local)
   const visibles = useMemo(() => {
     const n = normalizar(q)
-    return todas().filter(c => normalizar(`${c.titulo} ${c.artista}`).includes(n))
-  }, [q])
+    return todasLas.filter(c => normalizar(`${c.titulo} ${c.artista}`).includes(n))
+  }, [q, todasLas])
 
   return (
     <>
@@ -65,6 +67,12 @@ function Lista() {
               ))}
             </ul>
           )}
+        {hayLocales && (
+          <div className="publicar">
+            <button type="button" className="chico" onClick={exportarPropias}>exportar mis canciones para publicar</button>
+            <span className="estado">Las que dicen “solo en este navegador” no las ve nadie más. Se bajan a un archivo y se publican con <code>node tools/importar.mjs</code>.</span>
+          </div>
+        )}
       </main>
     </>
   )
