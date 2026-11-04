@@ -52,9 +52,13 @@ export function parseSong(body) {
 
   for (const raw of body.trim().split('\n')) {
     const line = raw.replace(/\r$/, '')
-    if (line.startsWith('# ')) {
+    if (line.trim() === '---') {          // marca manual: el próximo bloque arranca en otra columna
       push()
-      current = { seccion: line.slice(2).trim(), lineas: [] }
+      current = { seccion: null, lineas: [], columna: true }
+    } else if (line.startsWith('# ')) {
+      const columna = current.columna && !current.lineas.length
+      push()
+      current = { seccion: line.slice(2).trim(), lineas: [], ...(columna ? { columna: true } : {}) }
     } else if (line.trim() === '') {
       if (current.lineas.length) { push(); current = { seccion: null, lineas: [] } }
     } else {
