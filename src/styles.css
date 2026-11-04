@@ -172,3 +172,8 @@ button.chico:hover { border-color: var(--marca-1); color: var(--marca-1); }
 .nueva:hover { background: var(--marca-1); color: var(--bg); }
 
 .acciones-cancion { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
+
+/* La vista previa del editor es angosta: siempre una columna y sin cortar palabras entre acordes */
+.vista .letra { columns: 1 !important; }
+.vista .nueva-columna { break-before: auto !important; }
+.vista .linea { white-space: nowrap; }
