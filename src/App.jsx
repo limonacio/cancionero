@@ -89,7 +89,7 @@ function Cancion({ id }) {
 
   const editar = () => { if (prepararEdicion(cancion)) window.location.hash = '#/nueva' }
   const borrar = () => {
-    if (!window.confirm('¿Borrar esta canción de tu navegador?')) return
+    if (!window.confirm(cancion.reemplaza ? '¿Descartar tus cambios y volver a la original?' : '¿Borrar esta canción de tu navegador?')) return
     borrarPropia(cancion.id)
     window.location.hash = '#/'
   }
@@ -119,13 +119,11 @@ function Cancion({ id }) {
           {pasos !== 0 && <button className="reset" onClick={() => setPasos(0)}>volver a mi tono</button>}
         </div>
 
-        {cancion.local && (
-          <div className="acciones-cancion">
-            <button type="button" className="chico" onClick={editar}>editar</button>
-            <button type="button" className="chico" onClick={copiar}>{copiada ? '¡copiado!' : 'copiar para publicar'}</button>
-            <button type="button" className="chico" onClick={borrar}>borrar</button>
-          </div>
-        )}
+        <div className="acciones-cancion">
+          <button type="button" className="chico" onClick={editar}>editar</button>
+          {cancion.local && <button type="button" className="chico" onClick={copiar}>{copiada ? '¡copiado!' : 'copiar para publicar'}</button>}
+          {cancion.local && <button type="button" className="chico" onClick={borrar}>{cancion.reemplaza ? 'volver a la original' : 'borrar'}</button>}
+        </div>
 
         <Letra bloques={bloques} mostrar={mostrar} />
       </main>

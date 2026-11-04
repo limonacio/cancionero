@@ -12,10 +12,13 @@ const guardar = (lista) => {
 }
 export const guardarPropia = (c) => guardar([...leerPropias().filter(x => x.id !== c.id), { ...c, local: true }])
 export const borrarPropia = (id) => guardar(leerPropias().filter(x => x.id !== id))
-// Las del sitio ganan si el id se repite.
+// Si una canción guardada tiene el mismo id que una del sitio, la tuya la reemplaza (solo en este navegador).
 export const todas = () => {
-  const ids = new Set(canciones.map(c => c.id))
-  return [...canciones, ...leerPropias().filter(c => !ids.has(c.id))]
+  const locales = leerPropias()
+  const porId = new Map(locales.map(c => [c.id, c]))
+  const idsSitio = new Set(canciones.map(c => c.id))
+  const delSitio = canciones.map(c => (porId.has(c.id) ? { ...porId.get(c.id), local: true, reemplaza: true } : c))
+  return [...delSitio, ...locales.filter(c => !idsSitio.has(c.id))]
 }
 
 const CLAVE_BORRADOR = 'cancionero-borrador'
