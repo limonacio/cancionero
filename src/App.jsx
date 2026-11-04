@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { todas } from './lib/propias.js'
+import { todas, borrarPropia, prepararEdicion, entradaParaSongs } from './lib/propias.js'
 import { parseSong, transposeChord, prefersFlats } from './lib/chords.js'
 import Letra from './Letra.jsx'
 import Editor from './Editor.jsx'
@@ -73,6 +73,7 @@ function Lista() {
 function Cancion({ id }) {
   const cancion = todas().find(c => c.id === id)
   const [pasos, setPasos] = useState(0)
+  const [copiada, setCopiada] = useState(false)
   useEffect(() => { setPasos(0); window.scrollTo(0, 0) }, [id])
 
   const bloques = useMemo(() => (cancion ? parseSong(cancion.cuerpo) : []), [cancion])
@@ -84,6 +85,17 @@ function Cancion({ id }) {
         <main className="ancho"><p className="vacio">No encontré esa canción. Volvé a la lista y elegí otra.</p></main>
       </>
     )
+  }
+
+  const editar = () => { if (prepararEdicion(cancion)) window.location.hash = '#/nueva' }
+  const borrar = () => {
+    if (!window.confirm('¿Borrar esta canción de tu navegador?')) return
+    borrarPropia(cancion.id)
+    window.location.hash = '#/'
+  }
+  const copiar = async () => {
+    try { await navigator.clipboard.writeText(entradaParaSongs(cancion)); setCopiada(true); setTimeout(() => setCopiada(false), 2500) }
+    catch { window.alert('No pude copiar solo. Abrí el editor con "editar" y usá el código que muestra abajo.') }
   }
 
   const flats = prefersFlats(cancion.tono, pasos)
@@ -106,6 +118,14 @@ function Cancion({ id }) {
           <button onClick={() => setPasos(p => p + 1)} aria-label="Subir un semitono">+</button>
           {pasos !== 0 && <button className="reset" onClick={() => setPasos(0)}>volver a mi tono</button>}
         </div>
+
+        {cancion.local && (
+          <div className="acciones-cancion">
+            <button type="button" className="chico" onClick={editar}>editar</button>
+            <button type="button" className="chico" onClick={copiar}>{copiada ? '¡copiado!' : 'copiar para publicar'}</button>
+            <button type="button" className="chico" onClick={borrar}>borrar</button>
+          </div>
+        )}
 
         <Letra bloques={bloques} mostrar={mostrar} />
       </main>

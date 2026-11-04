@@ -170,3 +170,5 @@ button.chico:hover { border-color: var(--marca-1); color: var(--marca-1); }
 
 .nueva { display: inline-block; margin: 0 0 12px; padding: 8px 14px; border: 1px solid var(--marca-1); border-radius: 999px; color: var(--marca-1); text-decoration: none; font-size: .85rem; font-weight: 700; }
 .nueva:hover { background: var(--marca-1); color: var(--bg); }
+
+.acciones-cancion { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
