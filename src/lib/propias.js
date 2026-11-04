@@ -44,3 +44,8 @@ ${esc(c.cuerpo)}
 \`,
   },
 `
+
+// "Nueva canción" siempre arranca en blanco: se descarta el borrador anterior.
+export const limpiarBorrador = () => {
+  try { localStorage.removeItem(CLAVE_BORRADOR) } catch { /* sin guardado */ }
+}

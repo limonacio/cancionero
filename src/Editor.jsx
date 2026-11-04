@@ -1,8 +1,8 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import Letra from './Letra.jsx'
 import { parseSong } from './lib/chords.js'
 import { convertirClasico, aMinusculas } from './lib/convertir.js'
-import { guardarPropia, borrarPropia } from './lib/propias.js'
+import { guardarPropia, borrarPropia, limpiarBorrador } from './lib/propias.js'
 
 const CLAVE = 'cancionero-borrador'
 
@@ -35,8 +35,10 @@ export default function Editor() {
   const [minusculas, setMinusculas] = useState(!!inicial.minusculas)
   const [copiado, setCopiado]     = useState('')
   const [editando, setEditando]   = useState(inicial.editando || '')
+  const guardada = useRef(false)   // tras guardar, no volver a escribir el borrador
 
   useEffect(() => {
+    if (guardada.current) return
     try { localStorage.setItem(CLAVE, JSON.stringify({ titulo, artista, tono, texto, minusculas, editando })) } catch { /* sin guardado */ }
   }, [titulo, artista, tono, texto, minusculas, editando])
 
@@ -69,7 +71,7 @@ ${esc(cuerpo)}
     const id = slug(titulo) || 'nueva-cancion'
     const ok = guardarPropia({ id, titulo: titulo || 'Título', artista: artista || 'Artista', tono: tono || 'Am', cuerpo })
     if (ok && editando && editando !== id) borrarPropia(editando)   // si cambió el título, no dejar la vieja
-    if (ok) setEditando(id)
+    if (ok) { guardada.current = true; limpiarBorrador() }
     if (ok) window.location.hash = `#/c/${encodeURIComponent(id)}`
     else setCopiado('error')
   }

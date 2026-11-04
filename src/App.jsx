@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { todas, borrarPropia, prepararEdicion, entradaParaSongs } from './lib/propias.js'
+import { todas, borrarPropia, prepararEdicion, entradaParaSongs, limpiarBorrador } from './lib/propias.js'
 import { parseSong, transposeChord, prefersFlats } from './lib/chords.js'
 import Letra from './Letra.jsx'
 import Editor from './Editor.jsx'
@@ -41,7 +41,7 @@ function Lista() {
       <Cabecera />
       <main>
         <p className="intro">Canciones adaptadas a mi tonalidad, con letra y acordes listos para tocar.</p>
-        <a className="nueva" href="#/nueva">+ nueva canción</a>
+        <a className="nueva" href="#/nueva" onClick={limpiarBorrador}>+ nueva canción</a>
         <input
           className="buscador"
           type="search"
