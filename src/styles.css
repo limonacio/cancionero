@@ -183,3 +183,6 @@ button.chico:hover { border-color: var(--marca-1); color: var(--marca-1); }
 .grupo { break-inside: avoid; }
 
 .publicar { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 22px 0 0; }
+
+.opciones-base { display: flex; flex-direction: column; gap: 4px; margin-top: 14px; }
+.opciones-base .opcion { margin-top: 0; }

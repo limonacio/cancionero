@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
-import { todas, borrarPropia, prepararEdicion, entradaParaSongs, limpiarBorrador, exportarPropias } from './lib/propias.js'
+import { todas, borrarPropia, prepararEdicion, entradaParaSongs, limpiarBorrador, exportarPropias, refrescarRemotas } from './lib/propias.js'
+import { borrarRemota } from './lib/api.js'
 import { parseSong, transposeChord, prefersFlats } from './lib/chords.js'
 import Letra from './Letra.jsx'
 import Editor from './Editor.jsx'
@@ -60,7 +61,7 @@ function Lista() {
                 <li key={c.id}>
                   <a href={`#/c/${encodeURIComponent(c.id)}`}>
                     <span className="titulo">{c.titulo}</span>
-                    <span className="artista">{c.artista}{c.local ? ' · solo en este navegador' : ''}</span>
+                    <span className="artista">{c.artista}{c.local ? ' · solo en este navegador' : ''}{c.remota ? ` · en la base (${c.visibilidad === 'publica' ? 'pública' : 'privada'})` : ''}</span>
                     <span className="tono">{c.tono}</span>
                   </a>
                 </li>
@@ -96,9 +97,16 @@ function Cancion({ id }) {
   }
 
   const editar = () => { if (prepararEdicion(cancion)) window.location.hash = '#/nueva' }
-  const borrar = () => {
-    if (!window.confirm(cancion.reemplaza ? '¿Descartar tus cambios y volver a la original?' : '¿Borrar esta canción de tu navegador?')) return
-    borrarPropia(cancion.id)
+  const borrar = async () => {
+    const msg = cancion.remota ? '¿Borrar esta canción de la base de datos? No se puede deshacer.'
+      : cancion.reemplaza ? '¿Descartar tus cambios y volver a la original?' : '¿Borrar esta canción de tu navegador?'
+    if (!window.confirm(msg)) return
+    if (cancion.remota) {
+      try { await borrarRemota(cancion.id); await refrescarRemotas() }
+      catch (e) { window.alert(`No pude borrarla: ${e.message}`); return }
+    } else {
+      borrarPropia(cancion.id)
+    }
     window.location.hash = '#/'
   }
   const copiar = async () => {
@@ -130,7 +138,7 @@ function Cancion({ id }) {
         <div className="acciones-cancion">
           <button type="button" className="chico" onClick={editar}>editar</button>
           {cancion.local && <button type="button" className="chico" onClick={copiar}>{copiada ? '¡copiado!' : 'copiar para publicar'}</button>}
-          {cancion.local && <button type="button" className="chico" onClick={borrar}>{cancion.reemplaza ? 'volver a la original' : 'borrar'}</button>}
+          {(cancion.local || cancion.remota) && <button type="button" className="chico" onClick={borrar}>{cancion.reemplaza ? 'volver a la original' : 'borrar'}</button>}
         </div>
 
         <Letra bloques={bloques} mostrar={mostrar} />
@@ -141,7 +149,16 @@ function Cancion({ id }) {
 
 export default function App() {
   const hash = useHash()
+  const [version, setVersion] = useState(0)
+
+  useEffect(() => {
+    const alCambiar = () => setVersion(v => v + 1)
+    window.addEventListener('cancionero:cambio', alCambiar)
+    refrescarRemotas()   // en la web publicada no hace nada; en tu compu trae las de la base si hay sesión
+    return () => window.removeEventListener('cancionero:cambio', alCambiar)
+  }, [])
+
   if (hash === '#/nueva') return <Editor />
   const m = hash.match(/^#\/c\/(.+)$/)
-  return m ? <Cancion id={decodeURIComponent(m[1])} /> : <Lista />
+  return m ? <Cancion key={`c${version}`} id={decodeURIComponent(m[1])} /> : <Lista key={`l${version}`} />
 }

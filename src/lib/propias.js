@@ -1,6 +1,7 @@
 // Canciones guardadas en ESTE navegador (localStorage). Aparecen en la lista al instante.
 // Para que las vea todo el mundo, hay que sumarlas a src/data/songs.js (o tener un backend).
 import { canciones } from '../data/songs.js'
+import { sesion, listarRemotas } from './api.js'
 
 const CLAVE = 'cancionero-propias'
 
@@ -12,6 +13,17 @@ const guardar = (lista) => {
 }
 export const guardarPropia = (c) => guardar([...leerPropias().filter(x => x.id !== c.id), { ...c, local: true }])
 export const borrarPropia = (id) => guardar(leerPropias().filter(x => x.id !== id))
+// Canciones que vienen de la base de datos (Django). Solo se cargan corriendo en tu compu (npm run dev).
+let remotas = []
+
+// Vuelve a pedirle las canciones al servidor y avisa a la pantalla. Sin servidor o sin sesión, no hace nada.
+export async function refrescarRemotas() {
+  if (!import.meta.env.DEV) return
+  const s = await sesion()
+  try { remotas = s.disponible ? await listarRemotas() : [] } catch { remotas = [] }
+  window.dispatchEvent(new Event('cancionero:cambio'))
+}
+
 const CAMPOS = ['titulo', 'artista', 'tono', 'cuerpo']
 const igual = (a, b) => CAMPOS.every(k => a[k] === b[k])
 
@@ -25,7 +37,7 @@ export const todas = () => {
     const l = porId.get(c.id)
     return l && !igual(l, c) ? { ...l, local: true, reemplaza: true } : c
   })
-  return [...lista, ...locales.filter(c => !delSitio.has(c.id))]
+  return [...lista, ...locales.filter(c => !delSitio.has(c.id)), ...remotas]
 }
 
 // Baja un archivo con las canciones que solo están en este navegador, listo para tools/importar.mjs
@@ -50,6 +62,7 @@ export const prepararEdicion = (c) => {
   try {
     localStorage.setItem(CLAVE_BORRADOR, JSON.stringify({
       titulo: c.titulo, artista: c.artista, tono: c.tono, texto: c.cuerpo, minusculas: false, editando: c.id,
+      publica: c.visibilidad === 'publica', soloAcordes: !!c.solo_acordes,
     }))
     return true
   } catch { return false }
