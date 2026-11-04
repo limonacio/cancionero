@@ -167,3 +167,6 @@ button.chico:hover { border-color: var(--marca-1); color: var(--marca-1); }
 
 .opcion { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: .85rem; color: var(--muted); cursor: pointer; }
 .opcion input { width: 18px; height: 18px; accent-color: var(--marca-2); }
+
+.nueva { display: inline-block; margin: 0 0 12px; padding: 8px 14px; border: 1px solid var(--marca-1); border-radius: 999px; color: var(--marca-1); text-decoration: none; font-size: .85rem; font-weight: 700; }
+.nueva:hover { background: var(--marca-1); color: var(--bg); }

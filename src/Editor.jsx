@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import Letra from './Letra.jsx'
 import { parseSong } from './lib/chords.js'
 import { convertirClasico, aMinusculas } from './lib/convertir.js'
+import { guardarPropia } from './lib/propias.js'
 
 const CLAVE = 'cancionero-borrador'
 
@@ -63,6 +64,12 @@ ${esc(cuerpo)}
       setTimeout(() => setCopiado(''), 2500)
     } catch { setCopiado('error') }
   }
+  const guardarAca = () => {
+    const id = slug(titulo) || 'nueva-cancion'
+    const ok = guardarPropia({ id, titulo: titulo || 'Título', artista: artista || 'Artista', tono: tono || 'Am', cuerpo })
+    if (ok) window.location.hash = `#/c/${encodeURIComponent(id)}`
+    else setCopiado('error')
+  }
   const vaciar = () => {
     if (!window.confirm('¿Borrar el borrador? No se puede deshacer.')) return
     setTitulo(''); setArtista(''); setTono(''); setTexto('')
@@ -77,7 +84,7 @@ ${esc(cuerpo)}
       <main className="ancho">
         <p className="intro">
           Escribí o pegá la canción. Los acordes pueden ir <strong>arriba de la letra</strong> o <strong>entre paréntesis dentro de la letra</strong>, como (Am).
-          A la derecha ves cómo queda. Este borrador se guarda en tu navegador; la canción se publica recién cuando pegás la entrada en <code>songs.js</code>.
+          A la derecha ves cómo queda. "Guardar y ver" la deja en tu cancionero de este navegador al instante. Para que la vea todo el mundo, copiala y pegala en <code>songs.js</code>.
         </p>
 
         <div className="campos">
@@ -121,8 +128,11 @@ ${esc(cuerpo)}
         </label>
 
         <div className="acciones">
-          <button type="button" className="principal" onClick={copiar} disabled={!texto.trim()}>
-            {copiado === 'ok' ? '¡Copiado!' : 'Copiar entrada para songs.js'}
+          <button type="button" className="principal" onClick={guardarAca} disabled={!texto.trim() || !titulo.trim()}>
+            Guardar y ver
+          </button>
+          <button type="button" className="chico" onClick={copiar} disabled={!texto.trim()}>
+            {copiado === 'ok' ? '¡Copiado!' : 'copiar para publicar (songs.js)'}
           </button>
           <button type="button" className="chico" onClick={vaciar}>borrar borrador</button>
           {copiado === 'error' && <span className="aviso">No pude copiar solo: seleccioná el código de abajo y copialo a mano.</span>}

@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { canciones } from './data/songs.js'
+import { todas } from './lib/propias.js'
 import { parseSong, transposeChord, prefersFlats } from './lib/chords.js'
 import Letra from './Letra.jsx'
 import Editor from './Editor.jsx'
@@ -33,7 +33,7 @@ function Lista() {
   const [q, setQ] = useState('')
   const visibles = useMemo(() => {
     const n = normalizar(q)
-    return canciones.filter(c => normalizar(`${c.titulo} ${c.artista}`).includes(n))
+    return todas().filter(c => normalizar(`${c.titulo} ${c.artista}`).includes(n))
   }, [q])
 
   return (
@@ -41,6 +41,7 @@ function Lista() {
       <Cabecera />
       <main>
         <p className="intro">Canciones adaptadas a mi tonalidad, con letra y acordes listos para tocar.</p>
+        <a className="nueva" href="#/nueva">+ nueva canción</a>
         <input
           className="buscador"
           type="search"
@@ -57,7 +58,7 @@ function Lista() {
                 <li key={c.id}>
                   <a href={`#/c/${encodeURIComponent(c.id)}`}>
                     <span className="titulo">{c.titulo}</span>
-                    <span className="artista">{c.artista}</span>
+                    <span className="artista">{c.artista}{c.local ? ' · solo en este navegador' : ''}</span>
                     <span className="tono">{c.tono}</span>
                   </a>
                 </li>
@@ -70,7 +71,7 @@ function Lista() {
 }
 
 function Cancion({ id }) {
-  const cancion = canciones.find(c => c.id === id)
+  const cancion = todas().find(c => c.id === id)
   const [pasos, setPasos] = useState(0)
   useEffect(() => { setPasos(0); window.scrollTo(0, 0) }, [id])
 
